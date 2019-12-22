@@ -10,14 +10,24 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import geekbrains.ru.bdaplication.db.DataReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-public class NoteAdapter  extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
+import geekbrains.ru.bdaplication.db.DataReader;
+import geekbrains.ru.bdaplication.db.DataSource;
+
+public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> implements ItemTouchHelperAdapter {
 
     private final DataReader reader;
+    private DataSource dataSource;
     private OnMenuItemClickListener itemMenuClickListener;
-//    private Note note;
-    public  NoteAdapter(DataReader reader) {
+//    private EnumMap mItems;//fixme
+    private final List<String> mItems = new ArrayList<>();
+
+
+    //    private Note note;
+    public NoteAdapter(DataReader reader) {
         //TODO:add db provider
         this.reader = reader;
 //        note = new Note();
@@ -47,12 +57,14 @@ public class NoteAdapter  extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
         return reader.getCount();
     }
 
-    public void setOnMenuItemClickListener(OnMenuItemClickListener onMenuItemClickListener){
+    public void setOnMenuItemClickListener(OnMenuItemClickListener onMenuItemClickListener) {
         this.itemMenuClickListener = onMenuItemClickListener;
     }
 
+
     public interface OnMenuItemClickListener {
         void onItemEditClick(Note note);
+
         void onItemDeleteClick(Note note);
     }
 
@@ -74,7 +86,7 @@ public class NoteAdapter  extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
             });
         }
 
-        public void bind(Note note){
+        public void bind(Note note) {
             this.note = note;
             titleNote.setText(note.getTitle());
         }
@@ -83,7 +95,7 @@ public class NoteAdapter  extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
             PopupMenu popup = new PopupMenu(view.getContext(), view);
             MenuInflater inflater = popup.getMenuInflater();
             inflater.inflate(R.menu.context_menu, popup.getMenu());
-            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener(){
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
@@ -100,5 +112,29 @@ public class NoteAdapter  extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
             popup.show();
         }
     }
+    @Override
+    public void onItemDismiss(int position) {
+        mItems.remove(position);//fixme
+//        dataSource.deleteAll();
+        notifyItemRemoved(position);
+    }
+
+    //adapter
+
+    @Override
+    public boolean onItemMove(int fromPosition, int toPosition) {
+        if (fromPosition < toPosition) {
+            for (int i = fromPosition; i < toPosition; i++) {
+                Collections.swap(mItems, i, i + 1);
+            }
+        } else {
+            for (int i = fromPosition; i > toPosition; i--) {
+                Collections.swap(mItems, i, i - 1);
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition);
+        return true;
+    }
+
 }
 
