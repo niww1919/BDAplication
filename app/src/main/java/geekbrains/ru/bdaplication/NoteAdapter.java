@@ -1,13 +1,17 @@
 package geekbrains.ru.bdaplication;
 
+import android.app.Activity;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -20,7 +24,6 @@ import geekbrains.ru.bdaplication.db.DataSource;
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> implements ItemTouchHelperAdapter {
 
     private final DataReader reader;
-    private DataSource dataSource;
     private OnMenuItemClickListener itemMenuClickListener;
 //    private EnumMap mItems;//fixme
     private final List<String> mItems = new ArrayList<>();
@@ -62,13 +65,13 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
     }
 
 
-    public interface OnMenuItemClickListener {
+    public interface OnMenuItemClickListener  {
         void onItemEditClick(Note note);
 
         void onItemDeleteClick(Note note);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder{
 
         private TextView titleNote;
         private Note note;
@@ -76,14 +79,14 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
         public ViewHolder(View itemView) {
             super(itemView);
             titleNote = itemView.findViewById(R.id.itemText);
-            titleNote.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (itemMenuClickListener != null) {
-                        showPopupMenu(titleNote);
-                    }
-                }
-            });
+//            titleNote.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (itemMenuClickListener != null) {
+//                        showPopupMenu(titleNote);
+//                    }
+//                }
+//            });
         }
 
         public void bind(Note note) {
@@ -111,11 +114,43 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
             });
             popup.show();
         }
+        private void inputText(View view) {
+            LayoutInflater layoutInflater = LayoutInflater.from(view.getContext());
+            View viewInputText = layoutInflater.inflate(R.layout.item_view, null);
+            AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+            builder.setView(viewInputText);
+            builder.setTitle("Title");
+            EditText editText = viewInputText.findViewById(R.id.etInputText);
+
+
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+
+
+
+
+        }
+
+
+        @Override
+        public void onItemSelected() {
+            itemView.setBackgroundColor(Color.RED);
+            inputText(titleNote);
+
+        }
+
+        @Override
+        public void onItemClear() {
+            itemView.setBackgroundColor(0);
+
+        }
     }
     @Override
     public void onItemDismiss(int position) {
-        mItems.remove(position);//fixme
-//        dataSource.deleteAll();
+//        mItems.remove(position);//fixme
+//        reader.getPosition(position);
+
+
         notifyItemRemoved(position);
     }
 

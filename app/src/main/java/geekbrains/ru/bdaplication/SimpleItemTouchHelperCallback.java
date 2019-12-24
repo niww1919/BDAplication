@@ -1,8 +1,11 @@
 package geekbrains.ru.bdaplication;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
+
+import geekbrains.ru.bdaplication.db.DataSource;
 
 public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
@@ -41,5 +44,28 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
         mAdapter.onItemDismiss(viewHolder.getAdapterPosition());
 
 
+    }
+
+    @Override
+    public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
+
+        if (actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
+            if (viewHolder instanceof ItemTouchHelperViewHolder) {
+                ItemTouchHelperViewHolder itemViewHolder =
+                        (ItemTouchHelperViewHolder) viewHolder;
+                itemViewHolder.onItemSelected();
+            }
+        }
+        super.onSelectedChanged(viewHolder, actionState);
+    }
+
+    @Override
+    public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+        super.clearView(recyclerView, viewHolder);
+        if (viewHolder instanceof ItemTouchHelperViewHolder) {
+            ItemTouchHelperViewHolder itemViewHolder =
+                    (ItemTouchHelperViewHolder) viewHolder;
+            itemViewHolder.onItemClear();
+        }
     }
 }

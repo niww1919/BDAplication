@@ -53,10 +53,13 @@ public class MainActivity extends AppCompatActivity {
         });
         recyclerView.setAdapter(adapter);
 
-        ItemTouchHelper.Callback callback =
-                new SimpleItemTouchHelperCallback(adapter);
+        //fixme swipe
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(recyclerView);
+//        touchHelper.startSwipe();
+
+//        touchHelper.startSwipe();
 
     }
 
