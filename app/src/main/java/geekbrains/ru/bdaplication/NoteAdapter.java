@@ -116,11 +116,10 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
         }
         private void inputText(View view) {
             LayoutInflater layoutInflater = LayoutInflater.from(view.getContext());
-            View viewInputText = layoutInflater.inflate(R.layout.item_view, null);
+            View viewInputText = layoutInflater.inflate(R.layout.input_text, null);
             AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
             builder.setView(viewInputText);
             builder.setTitle("Title");
-            EditText editText = viewInputText.findViewById(R.id.etInputText);
 
 
             AlertDialog alertDialog = builder.create();
