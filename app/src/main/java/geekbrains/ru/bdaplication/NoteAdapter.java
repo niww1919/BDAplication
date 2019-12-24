@@ -1,6 +1,8 @@
 package geekbrains.ru.bdaplication;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -10,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,6 +28,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
 
     private final DataReader reader;
     private OnMenuItemClickListener itemMenuClickListener;
+    private OnSwipeInputText onSwipeInputText;
 //    private EnumMap mItems;//fixme
     private final List<String> mItems = new ArrayList<>();
 
@@ -64,12 +68,22 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
         this.itemMenuClickListener = onMenuItemClickListener;
     }
 
+    public void setOnSwipeInputText(OnSwipeInputText onSwipeInputText) {
+        this.onSwipeInputText = onSwipeInputText;
+    }
 
     public interface OnMenuItemClickListener  {
         void onItemEditClick(Note note);
 
         void onItemDeleteClick(Note note);
     }
+
+    public interface OnSwipeInputText  {
+        void onSwipeInputText(Note note);
+
+    }
+
+
 
     public class ViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder{
 
@@ -114,12 +128,25 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
             });
             popup.show();
         }
-        private void inputText(View view) {
+        private void inputText(final View view) {
             LayoutInflater layoutInflater = LayoutInflater.from(view.getContext());
-            View viewInputText = layoutInflater.inflate(R.layout.input_text, null);
+            final View viewInputText = layoutInflater.inflate(R.layout.input_text, null);
             AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
             builder.setView(viewInputText);
             builder.setTitle("Title");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ((TextView) viewInputText.findViewById(R.id.etInputText)).getText();
+//                    onSwipeInputText.onSwipeInputText(note);
+
+                    Toast.makeText(view.getContext(),
+                            ((TextView) viewInputText.findViewById(R.id.etInputText)).getText(),
+                            Toast.LENGTH_LONG).show();
+
+                }
+            });
+            EditText editText = viewInputText.findViewById(R.id.etInputText);
 
 
             AlertDialog alertDialog = builder.create();
@@ -134,7 +161,12 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
         @Override
         public void onItemSelected() {
             itemView.setBackgroundColor(Color.RED);
-            inputText(titleNote);
+//            inputText(titleNote);
+
+            onSwipeInputText.onSwipeInputText(note);
+//            if (itemMenuClickListener != null) {
+//                        showPopupMenu(titleNote);
+//                    }
 
         }
 

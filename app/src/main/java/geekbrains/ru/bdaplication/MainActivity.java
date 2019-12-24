@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         //todo
         adapter = new NoteAdapter(dataSource.getReader());
+
         adapter.setOnMenuItemClickListener(new NoteAdapter.OnMenuItemClickListener() {
             @Override
             public void onItemEditClick(Note note) {
@@ -49,6 +50,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemDeleteClick(Note note) {
                 deleteElement(note);
+            }
+        });
+
+        adapter.setOnSwipeInputText(new NoteAdapter.OnSwipeInputText() {
+            @Override
+            public void onSwipeInputText(Note note) {
+                addElement();
             }
         });
         recyclerView.setAdapter(adapter);
