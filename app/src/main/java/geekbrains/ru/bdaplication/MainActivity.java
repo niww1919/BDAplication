@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import java.sql.SQLException;
@@ -56,7 +57,9 @@ public class MainActivity extends AppCompatActivity {
         adapter.setOnSwipeInputText(new NoteAdapter.OnSwipeInputText() {
             @Override
             public void onSwipeInputText(Note note) {
-                addElement();
+                //fixme
+//                addElement();
+                addElementBySwipe();
             }
         });
         recyclerView.setAdapter(adapter);
@@ -118,6 +121,37 @@ public class MainActivity extends AppCompatActivity {
                 refreshData();
             }
         });
+        builder.show();
+    }
+
+    private void addElementBySwipe() {
+        LayoutInflater factory = LayoutInflater.from(this);
+        final View alertView = factory.inflate(R.layout.input_text, null);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        final AlertDialog alertDialog = builder.show();
+        builder.setView(alertView);
+        builder.setTitle(R.string.alert_title_add);
+        builder.setNegativeButton(R.string.alert_cancel, null);
+        builder.setPositiveButton(R.string.menu_add, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                dataSource.add(
+                        ((TextView)alertView.findViewById(R.id.etInputText)).getText().toString(),
+                        "ToDo"
+                );
+                refreshData();
+            }
+        });
+        // FIXME: 2019-12-25 show keyboard
+//        alertView.findViewById(R.id.etInputText).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                if (hasFocus) {
+//                    alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+//
+//                }
+//            }
+//        });
         builder.show();
     }
 

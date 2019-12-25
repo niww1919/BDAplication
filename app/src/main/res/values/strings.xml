@@ -1,11 +1,11 @@
 <resources>
-    <string name="app_name">BDAplication</string>
+    <string name="app_name">SwipeToDo</string>
     <string name="title">enter titile here</string>
     <string name="note">enter description here</string>
     <string name="menu_add">add</string>
     <string name="menu_clear">delete all</string>
     <string name="menu_edit">edit</string>
     <string name="menu_delete">delete</string>
-    <string name="alert_title_add">new item</string>
+    <string name="alert_title_add">New ToDo</string>
     <string name="alert_cancel">cancel</string>
 </resources>
