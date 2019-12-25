@@ -93,6 +93,13 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
         public ViewHolder(View itemView) {
             super(itemView);
             titleNote = itemView.findViewById(R.id.itemText);
+            titleNote.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    showPopupMenu(titleNote);
+                    return false;
+                }
+            });
 //            titleNote.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {

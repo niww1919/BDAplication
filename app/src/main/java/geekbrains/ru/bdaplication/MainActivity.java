@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import java.sql.SQLException;
@@ -62,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 addElementBySwipe();
             }
         });
+
         recyclerView.setAdapter(adapter);
 
         //fixme swipe
@@ -105,6 +108,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addElement() {
+
+
+
         LayoutInflater factory = LayoutInflater.from(this);
         final View alertView = factory.inflate(R.layout.add_item, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
