@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private NoteAdapter adapter;
     private DataSource dataSource;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

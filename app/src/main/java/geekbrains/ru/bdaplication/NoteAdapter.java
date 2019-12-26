@@ -100,14 +100,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
                     return false;
                 }
             });
-//            titleNote.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (itemMenuClickListener != null) {
-//                        showPopupMenu(titleNote);
-//                    }
-//                }
-//            });
         }
 
         public void bind(Note note) {
