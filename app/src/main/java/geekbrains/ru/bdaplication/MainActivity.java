@@ -6,31 +6,37 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import java.sql.SQLException;
 
 import geekbrains.ru.bdaplication.db.DataSource;
+import geekbrains.ru.bdaplication.room.AppDBRoom;
+import geekbrains.ru.bdaplication.room.DataToDo;
+import geekbrains.ru.bdaplication.room.DataDao;
 
 public class MainActivity extends AppCompatActivity {
 
     private NoteAdapter adapter;
     private DataSource dataSource;
+    AppDBRoom dbRoom;
+    DataDao dataDao;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        dbRoom = AppRoom.getInstance().getDatabase();
+        dataDao = dbRoom.dataDao();
+
         //TODO:init db
         dataSource = new DataSource(this);
         try {
@@ -57,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        adapter.setOnSwipeInputText(new NoteAdapter.OnSwipeInputText() {
+        adapter.setOnMenuInputTextOnSwipe(new NoteAdapter.OnSwipeInputText() {
             @Override
             public void onSwipeInputText(Note note) {
                 //fixme
@@ -142,10 +148,17 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton(R.string.menu_add, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
+                DataToDo dataToDO = new DataToDo();
+
+
+
+                dataDao.insert(dataToDO);
+
+
+
                 dataSource.add(
-                        ((TextView)alertView.findViewById(R.id.etInputText)).getText().toString(),
-                        "ToDo"
-                );
+                        ((TextView)alertView.findViewById(R.id.etInputText)).getText().toString(), "ToDo");
+//                ((TextView)alertView.findViewById(R.id.etInputText)).setId();
                 refreshData();
             }
         });

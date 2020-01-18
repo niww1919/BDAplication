@@ -68,7 +68,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
         this.itemMenuClickListener = onMenuItemClickListener;
     }
 
-    public void setOnSwipeInputText(OnSwipeInputText onSwipeInputText) {
+    public void setOnMenuInputTextOnSwipe(OnSwipeInputText onSwipeInputText) {
         this.onSwipeInputText = onSwipeInputText;
     }
 
