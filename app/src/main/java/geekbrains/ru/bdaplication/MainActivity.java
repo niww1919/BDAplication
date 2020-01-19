@@ -6,9 +6,11 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,17 +22,26 @@ import android.widget.TextView;
 import java.sql.SQLException;
 
 import geekbrains.ru.bdaplication.db.DataSource;
+import geekbrains.ru.bdaplication.realm.MyNote;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 public class MainActivity extends AppCompatActivity {
 
     private NoteAdapter adapter;
     private DataSource dataSource;
+    Realm realm;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //todo realm
+        Realm.init(this);
+        realm = Realm.getDefaultInstance();
+
         //TODO:init db
         dataSource = new DataSource(this);
         try {
@@ -142,6 +153,15 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton(R.string.menu_add, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
+                //todo add realm
+                realm.beginTransaction();
+                MyNote myNote1 = realm.createObject(MyNote.class);
+//                myNote1.setId(1);
+                myNote1.setMyNote(((TextView)alertView.findViewById(R.id.etInputText)).getText().toString());
+                realm.commitTransaction();
+                Log.i("realm", realm.where(MyNote.class).findAll().asJSON());
+
+
                 dataSource.add(
                         ((TextView)alertView.findViewById(R.id.etInputText)).getText().toString(),
                         "ToDo"
